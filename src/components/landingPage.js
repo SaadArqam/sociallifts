@@ -1,19 +1,18 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
-// import Contact from '../components/Contact';
 
 const LandingPage = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [transitioning, setTransitioning] = useState(false);
+  const [navToggled, setNavToggled] = useState(false);
+  const [navTransitionable, setNavTransitionable] = useState(false);
 
   const slides = [
     {
       title: "Recreation From Scratch",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      // sourceLink: "https://www.dylanbrouwer.design/work",
-      // ytLink: "https://youtu.be/nG2IyH43xMU",
+      description: "This is a recreation (from scratch) of dylanbrouwer.design/work. See how I did it.",
+      sourceLink: "https://www.dylanbrouwer.design/work",
+      ytLink: "https://youtu.be/nG2IyH43xMU",
       imageIndex: 1
     },
     {
@@ -34,40 +33,38 @@ const LandingPage = () => {
   ];
 
   const handleLeftClick = () => {
-    if (transitioning) return;
-    
-    console.log('Left click - current index:', activeIndex);
     const nextIndex = activeIndex - 1 >= 0 ? activeIndex - 1 : slides.length - 1;
-    console.log('Left click - next index:', nextIndex);
-    
-    setTransitioning(true);
     setActiveIndex(nextIndex);
-    
-    setTimeout(() => {
-      setTransitioning(false);
-    }, 400); // Match the CSS transition duration
   };
 
   const handleRightClick = () => {
-    if (transitioning) return;
-    
-    console.log('Right click - current index:', activeIndex);
     const nextIndex = activeIndex + 1 <= slides.length - 1 ? activeIndex + 1 : 0;
-    console.log('Right click - next index:', nextIndex);
-    
-    setTransitioning(true);
     setActiveIndex(nextIndex);
-    
-    setTimeout(() => {
-      setTransitioning(false);
-    }, 400); // Match the CSS transition duration
   };
 
+  const handleNavToggle = () => {
+    setNavTransitionable(true);
+    setNavToggled(!navToggled);
+  };
 
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 800px)");
+    
+    const handleMediaChange = (e) => {
+      setNavTransitionable(false);
+      setNavToggled(false);
+    };
+
+    mediaQuery.addEventListener('change', handleMediaChange);
+    
+    return () => {
+      mediaQuery.removeEventListener('change', handleMediaChange);
+    };
+  }, []);
 
   return (
     <>
-      <style jsx global>{`
+      <style jsx>{`
         :root {
           --background-color: rgb(6, 11, 25);
           --border-color: rgb(255, 255, 255, 0.1);
@@ -76,14 +73,12 @@ const LandingPage = () => {
         }
 
         body {
-          background-color: var(--background-color) !important;
-          display: flex !important;
-          flex-direction: column !important;
-          height: 100vh !important;
-          margin: 0px !important;
-          overflow: hidden !important;
-          color: white !important;
-          font-family: "Rubik", sans-serif !important;
+          background-color: var(--background-color);
+          display: flex;
+          flex-direction: column;
+          height: 100vh;
+          margin: 0px;
+          overflow: hidden;
         }
 
         * {
@@ -105,7 +100,78 @@ const LandingPage = () => {
           color: var(--highlight-color);
         }
 
+        nav {
+          display: flex;
+          width: 100%;
+          border-bottom: 1px solid var(--border-color);
+        }
 
+        nav .nav-section {
+          padding: 3rem 2rem;
+          display: flex;
+          gap: 1rem;
+          border-left: 1px solid var(--border-color);
+          align-items: center;
+          justify-content: center;
+        }
+
+        #nav-mobile-section {
+          display: flex;
+          flex-basis: calc(100% * (2 / 3));
+          z-index: 2;
+        }
+
+        #nav-toggle-button { 
+          align-items: center;
+          background-color: transparent;
+          border: none;
+          border-left: 1px solid var(--border-color);
+          color: white;
+          cursor: pointer;
+          display: none;
+          gap: 0.8rem;
+          height: 100%;
+          justify-content: center;
+          outline: none;
+          padding: 0rem 3rem;
+          position: relative;
+          z-index: 3;
+        }
+
+        #nav-toggle-button:hover,
+        #nav-toggle-button:hover > span {
+          color: var(--highlight-color);
+        }
+
+        #nav-toggle-button > span,
+        #nav-toggle-button > i { 
+          display: inline-block;
+          height: 1rem;
+          line-height: 1rem;
+        }
+
+        #nav-social-section,
+        #nav-contact-section {
+          flex-grow: 1;
+        }
+
+        #nav-logo-section {
+          flex-basis: calc(100% / 3);
+          justify-content: flex-start;
+        }
+
+        #nav-logo-section > a > i {
+          font-size: 2.5rem;
+        }
+
+        #nav-link-section {
+          flex-basis: 50%;
+          gap: 6rem; 
+        }
+
+        #nav-social-section {
+          gap: 3rem;
+        }
 
         main {
           flex-grow: 1;
@@ -225,20 +291,24 @@ const LandingPage = () => {
           background-color: rgba(255, 255, 255, 0.02);
         }
 
-        main > article > .article-nav-section > .article-nav-button:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
-
-        main > article > .article-nav-section > .article-nav-button:disabled:hover {
-          background-color: transparent;
-        }
-
         main > article > .article-nav-section > .article-nav-button:nth-child(2) {
           border-left: 1px solid var(--border-color);
         }
 
-                @media(max-width: 1200px) {    
+        @media(max-width: 1200px) {    
+          #nav-mobile-section {
+            flex-basis: calc(100% * 0.75);
+          }
+
+          #nav-logo-section {
+            flex-basis: calc(100% * 0.25);
+          }
+          
+          #nav-link-section {
+            flex-basis: calc(100% / 3);
+            gap: 3rem;
+          }
+
           main {
             overflow-y: auto;
           }
@@ -284,6 +354,63 @@ const LandingPage = () => {
         }
 
         @media(max-width: 800px) {  
+          nav {
+            justify-content: space-between;  
+          }
+          
+          nav[data-toggled="true"] > #nav-mobile-section {  
+            transform: translateY(0%);
+          }
+
+          nav[data-toggled="true"] > #nav-toggle-button {
+            border-left: none;
+          }
+
+          nav[data-transitionable="true"] > #nav-mobile-section {
+            transition: transform 400ms ease;
+          }
+          
+          nav .nav-section {
+            border-left: none;
+            padding: 1.5rem 1rem;
+          }
+          
+          #nav-logo-section > a > i {
+            font-size: 1.5rem;
+            margin-left: 1rem;
+          }
+          
+          #nav-mobile-section {
+            background-color: var(--background-color);
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+            position: fixed;
+            transform: translateY(-100%);
+          } 
+          
+          #nav-toggle-button {
+            display: flex;
+          }  
+          
+          #nav-link-section {
+            flex-basis: 60%;
+            flex-direction: column;
+            gap: 4rem;
+          }
+          
+          #nav-link-section > a {
+            font-size: 3rem; 
+          }
+          
+          #nav-social-section > a {
+            font-size: 2rem; 
+          }  
+          
+          #nav-contact-section {
+            padding-bottom: 4rem;
+          }
+          
           main > article {
             grid-template-rows: 1fr repeat(4, 0.5fr);
             height: max(700px, 100%);
@@ -343,7 +470,37 @@ const LandingPage = () => {
         }
       `}</style>
 
-      <Navbar />
+      <nav data-toggled={navToggled} data-transitionable={navTransitionable}>
+        <div id="nav-logo-section" className="nav-section">
+          <a href="#">
+            <i className="fa-solid fa-dumpster-fire"></i>
+          </a>
+        </div>
+        <div id="nav-mobile-section">
+          <div id="nav-link-section" className="nav-section">
+            <a href="#">ABOUT</a>
+            <a href="#">WORK</a>
+          </div>
+          <div id="nav-social-section" className="nav-section">
+            <a href="#">
+              <i className="fa-brands fa-twitter"></i>
+            </a>
+            <a href="https://www.youtube.com/c/Hyperplexed" target="_blank" rel="noopener noreferrer">
+              <i className="fa-brands fa-youtube"></i>
+            </a>    
+            <a href="#">
+              <i className="fa-brands fa-codepen"></i>
+            </a>
+          </div>
+          <div id="nav-contact-section" className="nav-section">
+            <a href="#">GET IN TOUCH</a>
+          </div>
+        </div>
+        <button id="nav-toggle-button" type="button" onClick={handleNavToggle}>
+          <span>Menu</span>
+          <i className="fa-solid fa-bars"></i>
+        </button>
+      </nav>
 
       <main>
         {slides.map((slide, index) => {
@@ -388,20 +545,10 @@ const LandingPage = () => {
                 <i className="fa-light fa-plus-large"></i>
               </div>
               <div className="article-nav-section article-section">
-                <button 
-                  className="article-nav-button" 
-                  type="button" 
-                  onClick={handleLeftClick}
-                  disabled={transitioning}
-                >
+                <button className="article-nav-button" type="button" onClick={handleLeftClick}>
                   <i className="fa-light fa-arrow-left-long"></i>
                 </button>
-                <button 
-                  className="article-nav-button" 
-                  type="button" 
-                  onClick={handleRightClick}
-                  disabled={transitioning}
-                >
+                <button className="article-nav-button" type="button" onClick={handleRightClick}>
                   <i className="fa-light fa-arrow-right-long"></i>
                 </button>
               </div>
@@ -409,7 +556,6 @@ const LandingPage = () => {
           );
         })}
       </main>
-      {/* <Contact /> */}
     </>
   );
 };
