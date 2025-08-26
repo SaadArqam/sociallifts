@@ -1,4 +1,8 @@
 @import "tailwindcss";
+@font-face {
+  font-family: 'CustomFont';
+  src: url('../public/fonts/CustomFont.woff2') format('woff2');
+}
 
 :root {
   --background: #ffffff;
