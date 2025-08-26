@@ -1,5 +1,6 @@
 import Navbar from '../components/Navbar';
 import Contact from  '../components/Contact';
+import './globals.css';
 
 export default function Home() {
   return (
