@@ -4,9 +4,8 @@ import React from "react";
 import Image from "next/image";
 
 const navLinks = [
-  { name: "About", href: "#about" },
-  { name: "Services", href: "#services" },
-  { name: "Contact", href: "#contact" },
+  { name: "Work", href: "/#work" },
+  { name: "About", href: "/#about" },
 ];
 
 export default function Navbar() {
@@ -20,12 +19,12 @@ export default function Navbar() {
 
         {/* Center nav (no notch pills) */}
         <nav aria-label="Primary" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-          <div className="relative flex items-center gap-6 bg-neutral-200 border border-black/10 rounded-full py-2 px-6 shadow-sm">
+          <div className="relative flex items-center gap-6 bg-white/90 border border-black/10 rounded-full py-2 px-6 shadow-sm backdrop-blur">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
-                className="text-neutral-900 no-underline text-[12px] tracking-wider font-bold uppercase opacity-85 hover:opacity-100 transition"
+                className="text-black no-underline text-[12px] tracking-wider font-bold uppercase opacity-85 hover:opacity-100 transition hover:text-red-600"
               >
                 {link.name}
               </a>
@@ -34,7 +33,7 @@ export default function Navbar() {
         </nav>
 
         {/* Contact button - top right */}
-        <a href="#contact" className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center h-9 px-4 rounded-lg bg-neutral-200 text-neutral-900 no-underline text-xs font-extrabold tracking-wide border border-black/10 shadow hover:bg-neutral-100">
+        <a href="/contact" className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center justify-center h-9 px-4 rounded-lg bg-red-600 text-white no-underline text-xs font-extrabold tracking-wide shadow hover:bg-red-700 transition">
           Contact
         </a>
       </div>

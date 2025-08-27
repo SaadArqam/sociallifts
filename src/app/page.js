@@ -2,6 +2,7 @@ import React from 'react'
 import Navbar from '../components/Navbar'
 import VideoSection from '../components/videosection'
 import About from '../components/About'
+// import Contact from '../components/Contact'
 
 const page = () => {
   return (
@@ -13,6 +14,7 @@ const page = () => {
       </div>
       <About />
       <VideoSection />
+      {/* <Contact /> */}
     </div>
   )
 }
