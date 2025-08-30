@@ -1,10 +1,38 @@
-import React from 'react'
+"use client"
+
+import React, { useState, useEffect } from 'react'
+import { Waveform } from 'ldrs/react'
+import 'ldrs/react/Waveform.css'
 import Navbar from '../components/Navbar'
 import VideoSection from '../components/videosection'
 import About from '../components/About'
 // import Contact from '../components/Contact'
 
-const page = () => {
+const Page = () => {
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    // Simulate loading time - you can adjust this or remove it if you want instant loading
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 2000)
+
+    return () => clearTimeout(timer)
+  }, [])
+
+  if (isLoading) {
+    return (
+      <div className="h-screen w-full flex items-center justify-center bg-white">
+        <Waveform
+          size="35"
+          stroke="3.5"
+          speed="1"
+          color="black" 
+        />
+      </div>
+    )
+  }
+
   return (
     <div>
       <Navbar />
@@ -19,7 +47,7 @@ const page = () => {
         {`WORK THAT\nHITS YOU RIGHT\nIN THE FEELS`}
       </h1>
       <p className='max-w-3xl mx-auto mt-16 text-neutral-800 text-base md:text-lg leading-relaxed text-center'>
-        That’s why we exist.
+        That&apos;s why we exist.
       </p>
     </section>
       {/* <About /> */}
@@ -29,4 +57,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page
