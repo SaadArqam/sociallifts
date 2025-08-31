@@ -6,6 +6,7 @@ import 'ldrs/react/Waveform.css'
 import Navbar from '../components/Navbar'
 import VideoSection from '../components/videosection'
 import About from '../components/About'
+import Footer from '../components/Footer'
 // import Contact from '../components/Contact'
 
 const Page = () => {
@@ -53,6 +54,7 @@ const Page = () => {
       {/* <About /> */}
       <VideoSection />
       {/* <Contact /> */}
+      <Footer />
     </div>
   )
 }

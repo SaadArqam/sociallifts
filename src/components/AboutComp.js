@@ -1,5 +1,6 @@
 "use client"
 import React from 'react'
+import Footer from './Footer'
 
 const AboutComp = () => {
     return (
@@ -71,6 +72,7 @@ const AboutComp = () => {
                     animation: scroll 20s linear infinite;
                 }
             `}</style>
+            <Footer />
         </section>
     )
 }
