@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { Waveform } from 'ldrs/react'
 import 'ldrs/react/Waveform.css'
 import Navbar from '../components/Navbar'
-import TextPressure from '../components/TextPressure'
+
 import VideoSection from '../components/videosection'
 import About from '../components/About'
 import Footer from '../components/Footer'
@@ -79,7 +79,7 @@ const Page = () => {
         }
       `}</style>
       <Navbar />
-      <TextPressure />
+
       <div className='absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center'>
           <p 
             className='text-white/70 text-sm mb-2 bounce-animation'
