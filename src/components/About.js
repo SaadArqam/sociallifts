@@ -1,8 +1,10 @@
 import React from 'react'
+import AnimatedTitle from './AnimatedTitle'
 
 const About = () => {
   return (
     <section id='about' className='w-full min-h-screen bg-white flex flex-col items-center justify-start pt-24 px-4'>
+      
       <h1
         className='font-coign font-black uppercase text-black text-center whitespace-pre-line leading-[0.8] tracking-[-0.015em] text-[38vw] md:text-[22vw] lg:text-[18vw]'
       >

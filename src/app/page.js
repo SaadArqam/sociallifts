@@ -3,12 +3,14 @@
 import React, { useState, useEffect } from 'react'
 import { Waveform } from 'ldrs/react'
 import 'ldrs/react/Waveform.css'
+import { TiLocationArrow } from "react-icons/ti";
 import Navbar from '../components/Navbar'
-
+import AnimatedTitle from '@/components/AnimatedTitle'
 import VideoSection from '../components/videosection'
 import About from '../components/About'
 import Footer from '../components/Footer'
 import Link from 'next/link'
+import Button from '../components/Button'
 // import Contact from '../components/Contact'
 
 const Page = () => {
@@ -79,6 +81,20 @@ const Page = () => {
         }
       `}</style>
       <Navbar />
+      <div className='h-[100vh] bg-red-600 flex flex-col items-center justify-center text-center'>
+        <h1 className='font-coign uppercase text-white whitespace-pre-line leading-[0.8] tracking-[-0.015em] text-[38vw] md:text-[22vw] lg:text-[18vw] font-bold'>Social Lifts</h1>
+        
+        {/* Enhanced scroll indicator */}
+        <div className='absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center'>
+          <p 
+            className='text-white/70 text-sm mb-2 bounce-animation'
+            style={{ opacity: scrollOpacity, transition: 'opacity 0.3s ease-out' }}
+          >
+            Scroll Down
+          </p>
+          <div className='w-px h-8 bg-white/30 pulse-animation'></div>
+        </div>
+      </div>
 
       <div className='absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center'>
           <p 
@@ -96,10 +112,16 @@ const Page = () => {
         <div className='text-4xl md:text-5xl font-bold text-black mb-16 opacity-80 tracking-wide'>++</div>
         
         {/* Main Heading */}
-        <h1 className='text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-black leading-[1.15] tracking-wide max-w-4xl mx-auto mb-20'>
+      <AnimatedTitle
+  title={`We design stories that<br />work as hard as they wow.`}
+  containerClass="mt-5 text-black text-center text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-[1.15] tracking-wide max-w-4xl mx-auto mb-20"
+/>
+
+
+        {/* <h1 className='text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-black leading-[1.15] tracking-wide max-w-4xl mx-auto mb-20'>
           We design stories that<br />
           work as hard as they wow.
-        </h1>
+        </h1> */}
         
         {/* Descriptive Paragraph */}
         <div className='max-w-3xl mx-auto mb-24'>
@@ -112,11 +134,17 @@ const Page = () => {
         </div>
         
         {/* Call-to-Action Button */}
-        <Link href='/contact'>
-          <button className='px-8 py-4 bg-black text-white hover:cursor-pointer font-medium text-base rounded-lg hover:bg-gray-800 transition-all duration-300'>
-            Book a Call
-          </button>
-        </Link>
+
+<Button
+  id="products-button"
+  title="Book A call"
+  href="/contact"
+  target="_blank"
+  rightIcon={<TiLocationArrow />}
+  containerClass="bg-black text-white md:flex hidden items-center justify-center gap-1"
+/>
+
+
       </section>
       {/* <About /> */}
       <VideoSection />

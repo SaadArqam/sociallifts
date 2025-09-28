@@ -112,25 +112,62 @@ const VideoSection = ({ sources }) => {
 
   return (
     <>
-      <section id='work' className="w-full pt-16 pb-12 bg-red-600 text-white">
+      <section id='work' className="w-full pt-16 pb-12 bg-white text-black">
         <div className="text-center mb-[22px]">
           <h1 className="font-black tracking-[-0.02em] text-[clamp(40px,9vw,96px)] leading-[0.9] m-0">Work</h1>
-          <p className="text-white/75 text-[clamp(14px,2.2vw,18px)] mt-[10px]">Explore my video editing work and projects</p>
+          <p className="text-black/75 text-[clamp(14px,2.2vw,18px)] mt-[10px]">Explore my video editing work and projects</p>
         </div>
-        <div className="relative">
-          <button
-            className="absolute hover:cursor-pointer left-6 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full grid place-items-center bg-white text-neutral-900 shadow-[0_10px_24px_rgba(0,0,0,0.35)] z-10"
-            type="button"
-            aria-label="Back"
-            onClick={() => scrollToIndex(Math.max(0, currentIndex - 1))}
-          >
-            ‹
-          </button>
-
+        <div className="relative flex items-center justify-center">
+          {/* Video Rail with overlayed left/right buttons like Instagram stories */}
           <div
-            className="flex gap-[22px] overflow-x-auto py-[6px] px-[14vw] [scroll-snap-type:x_mandatory] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="flex gap-[22px] overflow-x-auto py-[6px] px-[14vw] [scroll-snap-type:x_mandatory] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden relative"
             ref={railRef}
+            style={{ position: "relative" }}
           >
+            {/* Overlay navigation buttons */}
+            {videoSources.length > 0 && (
+              <>
+                {/* Left overlay button */}
+                <button
+                  className="hidden sm:flex absolute left-0 top-1/2 -translate-y-1/2 w-12 h-24 bg-black/30 hover:bg-black/50 transition rounded-l-xl items-center justify-start z-30"
+                  style={{ outline: "none", border: "none" }}
+                  type="button"
+                  aria-label="Back"
+                  onClick={() => scrollToIndex(Math.max(0, currentIndex - 1))}
+                >
+                  <span className="mx-auto text-3xl text-white drop-shadow">‹</span>
+                </button>
+                {/* Right overlay button */}
+                <button
+                  className="hidden sm:flex absolute right-0 top-1/2 -translate-y-1/2 w-12 h-24 bg-black/30 hover:bg-black/50 transition rounded-r-xl items-center justify-end z-30"
+                  style={{ outline: "none", border: "none" }}
+                  type="button"
+                  aria-label="Next"
+                  onClick={() => scrollToIndex(Math.min(videoSources.length - 1, currentIndex + 1))}
+                >
+                  <span className="mx-auto text-3xl text-white drop-shadow">›</span>
+                </button>
+                {/* Left scroll button (mobile) */}
+                <button
+                  className="flex sm:hidden absolute left-2 bottom-4 w-10 h-10 rounded-full bg-black/70 text-white shadow z-30 items-center justify-center"
+                  type="button"
+                  aria-label="Scroll Left"
+                  onClick={() => scrollByAmount(-320)}
+                >
+                  <span className="text-2xl">‹</span>
+                </button>
+                {/* Right scroll button (mobile) */}
+                <button
+                  className="flex sm:hidden absolute right-2 bottom-4 w-10 h-10 rounded-full bg-black/70 text-white shadow z-30 items-center justify-center"
+                  type="button"
+                  aria-label="Scroll Right"
+                  onClick={() => scrollByAmount(320)}
+                >
+                  <span className="text-2xl">›</span>
+                </button>
+              </>
+            )}
+            {/* Videos */}
             {videoSources.map((src, i) => {
               const isActive = i === currentIndex;
               const isPlaying = playingMap.get(i) ?? true;
@@ -139,7 +176,29 @@ const VideoSection = ({ sources }) => {
                   key={`${src}-${i}`}
                   ref={(el) => (itemRefs.current[i] = el)}
                   className={`flex-none w-[min(68vw,360px)] min-w-[min(68vw,360px)] aspect-[9/16] rounded-[22px] overflow-hidden relative bg-neutral-900 border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.35)] [scroll-snap-align:center] [scroll-snap-stop:always] transition duration-200 ${isActive ? 'opacity-100 scale-100 border-white/20' : 'opacity-65 scale-[0.94]'}`}
+                  style={{ position: "relative", display: "flex", alignItems: "center" }}
                 >
+                  {/* Left/Right scroll buttons for the central video */}
+                  {isActive && (
+                    <>
+                      <button
+                        className="absolute left-[-48px] top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/70 text-white shadow z-40 flex items-center justify-center"
+                        type="button"
+                        aria-label="Scroll Left"
+                        onClick={() => scrollToIndex(Math.max(0, currentIndex - 1))}
+                      >
+                        <span className="text-2xl">‹</span>
+                      </button>
+                      <button
+                        className="absolute right-[-48px] top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/70 text-white shadow z-40 flex items-center justify-center"
+                        type="button"
+                        aria-label="Scroll Right"
+                        onClick={() => scrollToIndex(Math.min(videoSources.length - 1, currentIndex + 1))}
+                      >
+                        <span className="text-2xl">›</span>
+                      </button>
+                    </>
+                  )}
                   <video
                     ref={(el) => (previewRefs.current[i] = el)}
                     src={src}
@@ -164,15 +223,6 @@ const VideoSection = ({ sources }) => {
               );
             })}
           </div>
-
-          <button
-            className="absolute hover:cursor-pointer  right-6 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full grid place-items-center bg-white text-neutral-900 shadow-[0_10px_24px_rgba(0,0,0,0.35)] z-10"
-            type="button"
-            aria-label="Next"
-            onClick={() => scrollToIndex(Math.min(videoSources.length - 1, currentIndex + 1))}
-          >
-            ›
-          </button>
         </div>
       </section>
     </>
