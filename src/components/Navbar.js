@@ -8,7 +8,11 @@ import gsap from "gsap";
 
 import Button from "./Button"; // keep your custom Button
 
-const navItems = ["Hero", "About", "Story", "Contact"];
+const navItems = [
+  { label: "Hero", href: "#hero" },
+  { label: "About", href: "/about" }, // Link to AboutComp.js route
+  { label: "Work", href: "#work" },
+];
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -72,13 +76,16 @@ const Navbar = () => {
 
   // correct nav links
   const getNavLink = (item) => {
-    const itemLower = item.toLowerCase();
-
-    if (pathname !== "/") {
-      return `/${itemLower === "hero" ? "" : `#${itemLower}`}`;
+    if (typeof item === "string") {
+      // fallback for string items
+      const itemLower = item.toLowerCase();
+      if (pathname !== "/") {
+        return `/${itemLower === "hero" ? "" : `#${itemLower}`}`;
+      }
+      return `#${itemLower}`;
     }
-
-    return `#${itemLower}`;
+    // If item is object with href, use it directly
+    return item.href;
   };
 
   return (
@@ -93,8 +100,8 @@ const Navbar = () => {
 
             <Button
               id="products-button"
-              title="Products"
-              href="https://living.ai/play-with-emo/"
+              title="Contact"
+              href="/contact"
               target="_blank"
               rightIcon={<TiLocationArrow />}
               containerClass="bg-blue-50 md:flex hidden items-center justify-center gap-1"
@@ -106,11 +113,11 @@ const Navbar = () => {
             <div className="hidden md:block">
               {navItems.map((item) => (
                 <Link
-                  key={item}
+                  key={typeof item === "string" ? item : item.label}
                   href={getNavLink(item)}
                   className="nav-hover-btn"
                 >
-                  {item}
+                  {typeof item === "string" ? item : item.label}
                 </Link>
               ))}
             </div>
