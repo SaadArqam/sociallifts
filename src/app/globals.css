@@ -172,8 +172,8 @@ html {
   transform: translate3d(0, 50%, 0) rotateY(15deg);
   display: inline-block;
 }
-.animated-word {
+/* .animated-word {
   display: inline-block;
   opacity: 0;
   transform: translateY(50%) rotateX(15deg) rotateY(15deg);
-}
+} */

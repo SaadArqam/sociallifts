@@ -118,6 +118,25 @@ const VideoSection = ({ sources }) => {
           <p className="text-black/75 text-[clamp(14px,2.2vw,18px)] mt-[10px]">Explore my video editing work and projects</p>
         </div>
         <div className="relative flex items-center justify-center">
+          {/* Desktop Instagram-style left/right scroll buttons, circular design, near center */}
+          <button
+            className="hidden md:flex absolute left-[38%] top-1/2 -translate-y-1/2 z-30 w-10 h-10 bg-black/70 hover:bg-black/90 transition rounded-full items-center justify-center shadow-lg border-2 border-white"
+            type="button"
+            aria-label="Scroll Left"
+            onClick={() => scrollByAmount(-350)}
+            style={{ outline: "none", border: "none" }}
+          >
+            <span className="text-3xl text-white drop-shadow">‹</span>
+          </button>
+          <button
+            className="hidden md:flex absolute right-[38%] top-1/2 -translate-y-1/2 z-30 w-10 h-10 bg-black/70 hover:bg-black/90 transition rounded-full items-center justify-center shadow-lg border-2 border-white"
+            type="button"
+            aria-label="Scroll Right"
+            onClick={() => scrollByAmount(350)}
+            style={{ outline: "none", border: "none" }}
+          >
+            <span className="text-3xl text-white drop-shadow">›</span>
+          </button>
           {/* Video Rail with overlayed left/right buttons like Instagram stories */}
           <div
             className="flex gap-[22px] overflow-x-auto py-[6px] px-[14vw] [scroll-snap-type:x_mandatory] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden relative"

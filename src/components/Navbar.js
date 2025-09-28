@@ -5,6 +5,7 @@ import { TiLocationArrow } from "react-icons/ti";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import gsap from "gsap";
+import Lenis from "lenis"; // Add Lenis for smooth scrolling
 
 import Button from "./Button"; // keep your custom Button
 
@@ -24,6 +25,31 @@ const Navbar = () => {
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [isIndicatorActive, setIndicatorActive] = useState(false);
   const [currentScrollY, setCurrentScrollY] = useState(0);
+
+  // Add Lenis smooth scroll on mount (window scroll for all pages)
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      touchMultiplier: 2,
+      infinite: false,
+      wheelMultiplier: 1,
+      lerp: 0.1,
+      syncTouch: true,
+      syncTouchLerp: 0.075,
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
 
   const toggleAudioIndicator = () => {
     setIsAudioPlaying((prev) => !prev);
@@ -55,7 +81,7 @@ const Navbar = () => {
       lastScrollYRef.current = window.scrollY;
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
