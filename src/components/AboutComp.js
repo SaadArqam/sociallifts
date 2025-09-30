@@ -1,14 +1,13 @@
 "use client"
 import React from 'react'
-import Footer from './Footer'
 import ScrollStack from "./ScrollStack"
 import { ScrollStackItem } from "./ScrollStack"
 
 
 const AboutComp = () => {
     return (
-        <section id='about' className='w-full min-h-screen py-20 bg-white overflow-x-hidden'>
-            <div className='w-full bg-white text-black py-20 overflow-x-auto relative'>
+        <section id='about' className='w-full min-h-screen py-20 bg-[oklch(0.98_0.005_95)] overflow-x-hidden'>
+            <div className='w-full bg-[oklch(0.98_0.005_95)] text-black py-20 overflow-x-auto relative'>
                 <div className='flex animate-scroll whitespace-nowrap'>
                     <h1 className='text-9xl md:text-[10rem] lg:text-[15rem] font-coign font-black uppercase tracking-wider text-black mr-8'>
                         The People. The Purpose. The Path ✧
@@ -111,7 +110,6 @@ const AboutComp = () => {
                 }
             `}</style>
 
-            <Footer />
         </section>
     )
 }

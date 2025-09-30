@@ -112,7 +112,7 @@ const VideoSection = ({ sources }) => {
 
   return (
     <>
-      <section id='work' className="w-full pt-16 pb-12 bg-white text-black">
+      <section id='work' className="w-full pt-16 pb-12 bg-[oklch(0.98_0.005_95)] text-black">
         <div className="text-center mb-[22px]">
           <h1 className="font-black tracking-[-0.02em] text-[clamp(40px,9vw,96px)] leading-[0.9] m-0">Work</h1>
           <p className="text-black/75 text-[clamp(14px,2.2vw,18px)] mt-[10px]">Explore my video editing work and projects</p>

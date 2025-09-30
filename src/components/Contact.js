@@ -1,9 +1,8 @@
 import React from 'react'
-import Footer from './Footer'
 
 const Contact = () => {
   return (
-    <section id='contact' className='w-full min-h-screen py-20 bg-white'>
+    <section id='contact' className='w-full min-h-screen py-20 bg-[oklch(0.98_0.005_95)]'>
       <div className="max-w-6xl mx-auto px-4">
         {/* Hero heading */}
         <h1 className='font-coign uppercase text-black text-center leading-[0.9] tracking-[-0.01em] text-[18vw] md:text-[12vw] lg:text-[10vw]'>
@@ -18,15 +17,15 @@ const Contact = () => {
           <form className='grid grid-cols-1 md:grid-cols-2 gap-6'>
             <div className='flex flex-col'>
               <label className='text-sm text-neutral-600 mb-2'>Name</label>
-              <input className='h-11 rounded-xl border border-black/10 bg-white px-4 outline-none focus:border-black/30' type="text" name="name" placeholder='Will Smith' />
+              <input className='h-11 rounded-xl border border-black/10 bg-[oklch(1_0_0)] px-4 outline-none focus:border-black/30' type="text" name="name" placeholder='Will Smith' />
             </div>
             <div className='flex flex-col'>
               <label className='text-sm text-neutral-600 mb-2'>Email</label>
-              <input className='h-11 rounded-xl border border-black/10 bg-white px-4 outline-none focus:border-black/30' type="email" name="email" placeholder='will@company.com' />
+              <input className='h-11 rounded-xl border border-black/10 bg-[oklch(1_0_0)] px-4 outline-none focus:border-black/30' type="email" name="email" placeholder='will@company.com' />
             </div>
             <div className='flex flex-col md:col-span-2'>
               <label className='text-sm text-neutral-600 mb-2'>About Project</label>
-              <textarea className='rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none focus:border-black/30 min-h-[120px]' name="message" placeholder="I'd like to..." />
+              <textarea className='rounded-2xl border border-black/10 bg-[oklch(1_0_0)] px-4 py-3 outline-none focus:border-black/30 min-h-[120px]' name="message" placeholder="I'd like to..." />
             </div>
             <div className='md:col-span-2'>
               <button className='h-9 px-6 rounded-full bg-black text-white text-sm font-semibold hover:bg-neutral-800 transition' type="submit">Submit</button>
@@ -44,7 +43,6 @@ const Contact = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </section>
   )
 }
