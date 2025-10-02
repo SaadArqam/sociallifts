@@ -36,11 +36,11 @@ const AnimatedStat = ({ number, caption, className = '' }) => {
   }, [])
 
   return (
-    <div ref={wrapperRef} className={`text-center sm:text-left ${className}`}>
-      <div className='stat-number text-black font-normal leading-none tracking-[-0.02em] text-[18vw] sm:text-8xl md:text-9xl'>
+    <div ref={wrapperRef} className={`text-center sm:text-left ${className} px-4 py-6`}>
+      <div className='stat-number text-black font-bold leading-none tracking-[-0.02em] text-[18vw] sm:text-8xl md:text-9xl font-mono mb-4'>
         {number}
       </div>
-      <div className='stat-caption mt-2 text-black text-sm md:text-base'>{caption}</div>
+      <div className='stat-caption text-black/80 text-sm md:text-base font-medium tracking-wide max-w-xs mx-auto sm:mx-0'>{caption}</div>
     </div>
   )
 }
