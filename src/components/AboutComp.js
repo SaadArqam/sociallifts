@@ -1,7 +1,343 @@
 "use client"
-import React from 'react'
-import ScrollStack from "./ScrollStack"
-import { ScrollStackItem } from "./ScrollStack"
+import React, { useLayoutEffect, useRef, useCallback } from 'react'
+import Lenis from 'lenis'
+
+// Inline ScrollStack components so cards live in the same file
+const ScrollStackItem = ({ children, itemClassName = '' }) => (
+    <div
+      className={`scroll-stack-card relative w-full h-80 my-8 p-12 rounded-[40px] shadow-[0_0_30px_rgba(0,0,0,0.1)] box-border origin-top will-change-transform bg-[oklch(1_0_0)] ${itemClassName}`.trim()}
+      style={{
+        backfaceVisibility: 'hidden',
+        transformStyle: 'preserve-3d',
+        opacity: 1
+      }}>
+      {children}
+    </div>
+);
+
+const ScrollStack = ({
+  children,
+  className = '',
+  itemDistance = 100,
+  itemScale = 0.03,
+  itemStackDistance = 30,
+  stackPosition = '20%',
+  scaleEndPosition = '10%',
+  baseScale = 0.85,
+  rotationAmount = 0,
+  blurAmount = 0,
+  useWindowScroll = false,
+  onStackComplete
+}) => {
+  const scrollerRef = useRef(null);
+  const stackCompletedRef = useRef(false);
+  const animationFrameRef = useRef(null);
+  const lenisRef = useRef(null);
+  const cardsRef = useRef([]);
+  const lastTransformsRef = useRef(new Map());
+  const isUpdatingRef = useRef(false);
+
+  const calculateProgress = useCallback((scrollTop, start, end) => {
+    if (scrollTop < start) return 0;
+    if (scrollTop > end) return 1;
+    return (scrollTop - start) / (end - start);
+  }, []);
+
+  const parsePercentage = useCallback((value, containerHeight) => {
+    if (typeof value === 'string' && value.includes('%')) {
+      return (parseFloat(value) / 100) * containerHeight;
+    }
+    return parseFloat(value);
+  }, []);
+
+  const getScrollData = useCallback(() => {
+    if (useWindowScroll) {
+      return {
+        scrollTop: window.scrollY,
+        containerHeight: window.innerHeight,
+        scrollContainer: document.documentElement
+      };
+    } else {
+      const scroller = scrollerRef.current;
+      return {
+        scrollTop: scroller.scrollTop,
+        containerHeight: scroller.clientHeight,
+        scrollContainer: scroller
+      };
+    }
+  }, [useWindowScroll]);
+
+  const getElementOffset = useCallback(element => {
+    if (useWindowScroll) {
+      const rect = element.getBoundingClientRect();
+      return rect.top + window.scrollY;
+    } else {
+      return element.offsetTop;
+    }
+  }, [useWindowScroll]);
+
+  const updateCardTransforms = useCallback(() => {
+    if (!cardsRef.current.length || isUpdatingRef.current) return;
+
+    isUpdatingRef.current = true;
+
+    const { scrollTop, containerHeight } = getScrollData();
+    const stackPositionPx = parsePercentage(stackPosition, containerHeight);
+    const scaleEndPositionPx = parsePercentage(scaleEndPosition, containerHeight);
+
+    const endElement = useWindowScroll
+      ? document.querySelector('.scroll-stack-end')
+      : scrollerRef.current?.querySelector('.scroll-stack-end');
+
+    const endElementTop = endElement ? getElementOffset(endElement) : 0;
+
+    cardsRef.current.forEach((card, i) => {
+      if (!card) return;
+
+      const cardTop = getElementOffset(card);
+      const triggerStart = cardTop - stackPositionPx - itemStackDistance * i;
+      const triggerEnd = cardTop - scaleEndPositionPx;
+      const pinStart = cardTop - stackPositionPx - itemStackDistance * i;
+      const pinEnd = endElementTop - containerHeight / 2;
+
+      const scaleProgress = calculateProgress(scrollTop, triggerStart, triggerEnd);
+      const targetScale = baseScale + i * itemScale;
+      const scale = 1 - scaleProgress * (1 - targetScale);
+      const rotation = rotationAmount ? i * rotationAmount * scaleProgress : 0;
+
+      let blur = 0;
+      if (blurAmount) {
+        let topCardIndex = 0;
+        for (let j = 0; j < cardsRef.current.length; j++) {
+          const jCardTop = getElementOffset(cardsRef.current[j]);
+          const jTriggerStart = jCardTop - stackPositionPx - itemStackDistance * j;
+          if (scrollTop >= jTriggerStart) {
+            topCardIndex = j;
+          }
+        }
+
+        if (i < topCardIndex) {
+          const depthInStack = topCardIndex - i;
+          blur = Math.max(0, depthInStack * blurAmount);
+        }
+      }
+
+      let translateY = 0;
+      const isPinned = scrollTop >= pinStart && scrollTop <= pinEnd;
+
+      if (isPinned) {
+        translateY = scrollTop - cardTop + stackPositionPx + itemStackDistance * i;
+      } else if (scrollTop > pinEnd) {
+        translateY = pinEnd - cardTop + stackPositionPx + itemStackDistance * i;
+      }
+
+      const newTransform = {
+        translateY: Math.round(translateY * 100) / 100,
+        scale: Math.round(scale * 1000) / 1000,
+        rotation: Math.round(rotation * 100) / 100,
+        blur: Math.round(blur * 100) / 100
+      };
+
+      const lastTransform = lastTransformsRef.current.get(i);
+      const hasChanged =
+        !lastTransform ||
+        Math.abs(lastTransform.translateY - newTransform.translateY) > 0.1 ||
+        Math.abs(lastTransform.scale - newTransform.scale) > 0.001 ||
+        Math.abs(lastTransform.rotation - newTransform.rotation) > 0.1 ||
+        Math.abs(lastTransform.blur - newTransform.blur) > 0.1;
+
+      if (hasChanged) {
+        const transform = `translate3d(0, ${newTransform.translateY}px, 0) scale(${newTransform.scale}) rotate(${newTransform.rotation}deg)`;
+        const filter = newTransform.blur > 0 ? `blur(${newTransform.blur}px)` : '';
+
+        card.style.transform = transform;
+        card.style.filter = filter;
+
+        lastTransformsRef.current.set(i, newTransform);
+      }
+
+      if (i === cardsRef.current.length - 1) {
+        const isInView = scrollTop >= pinStart && scrollTop <= pinEnd;
+        if (isInView && !stackCompletedRef.current) {
+          stackCompletedRef.current = true;
+          onStackComplete?.();
+        } else if (!isInView && stackCompletedRef.current) {
+          stackCompletedRef.current = false;
+        }
+      }
+    });
+
+    isUpdatingRef.current = false;
+  }, [
+    itemScale,
+    itemStackDistance,
+    stackPosition,
+    scaleEndPosition,
+    baseScale,
+    rotationAmount,
+    blurAmount,
+    useWindowScroll,
+    onStackComplete,
+    calculateProgress,
+    parsePercentage,
+    getScrollData,
+    getElementOffset
+  ]);
+
+  const handleScroll = useCallback(() => {
+    updateCardTransforms();
+  }, [updateCardTransforms]);
+
+  const setupLenis = useCallback(() => {
+    if (useWindowScroll) {
+      const lenis = new Lenis({
+        duration: 1.2,
+        easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true,
+        touchMultiplier: 2,
+        infinite: false,
+        wheelMultiplier: 1,
+        lerp: 0.1,
+        syncTouch: true,
+        syncTouchLerp: 0.075
+      });
+
+      lenis.on('scroll', handleScroll);
+
+      const raf = time => {
+        lenis.raf(time);
+        animationFrameRef.current = requestAnimationFrame(raf);
+      };
+      animationFrameRef.current = requestAnimationFrame(raf);
+
+      lenisRef.current = lenis;
+      return lenis;
+    } else {
+      const scroller = scrollerRef.current;
+      if (!scroller) return;
+
+      const lenis = new Lenis({
+        wrapper: scroller,
+        content: scroller.querySelector('.scroll-stack-inner'),
+        duration: 1.2,
+        easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true,
+        touchMultiplier: 2,
+        infinite: false,
+        wheelMultiplier: 1,
+        lerp: 0.1,
+        syncTouch: true,
+        syncTouchLerp: 0.075
+      });
+
+      lenis.on('scroll', handleScroll);
+
+      const raf = time => {
+        lenis.raf(time);
+        animationFrameRef.current = requestAnimationFrame(raf);
+      };
+      animationFrameRef.current = requestAnimationFrame(raf);
+
+      lenisRef.current = lenis;
+      return lenis;
+    }
+  }, [handleScroll, useWindowScroll]);
+
+  useLayoutEffect(() => {
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+
+    const cards = Array.from(useWindowScroll
+      ? document.querySelectorAll('.scroll-stack-card')
+      : scroller.querySelectorAll('.scroll-stack-card'));
+
+    cardsRef.current = cards;
+    const transformsCache = lastTransformsRef.current;
+
+    cards.forEach((card, i) => {
+      if (i < cards.length - 1) {
+        card.style.marginBottom = `${itemDistance}px`;
+      }
+      card.style.willChange = 'transform, filter';
+      card.style.transformOrigin = 'top center';
+      card.style.backfaceVisibility = 'hidden';
+      card.style.transform = 'translateZ(0)';
+      card.style.webkitTransform = 'translateZ(0)';
+      card.style.perspective = '1000px';
+      card.style.webkitPerspective = '1000px';
+    });
+
+    setupLenis();
+
+    updateCardTransforms();
+
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+      if (lenisRef.current) {
+        lenisRef.current.destroy();
+      }
+      stackCompletedRef.current = false;
+      cardsRef.current = [];
+      transformsCache.clear();
+      isUpdatingRef.current = false;
+    };
+  }, [
+    itemDistance,
+    itemScale,
+    itemStackDistance,
+    stackPosition,
+    scaleEndPosition,
+    baseScale,
+    rotationAmount,
+    blurAmount,
+    useWindowScroll,
+    onStackComplete,
+    setupLenis,
+    updateCardTransforms
+  ]);
+
+  const containerStyles = useWindowScroll
+    ? {
+        overscrollBehavior: 'contain',
+        WebkitOverflowScrolling: 'touch',
+        WebkitTransform: 'translateZ(0)',
+        transform: 'translateZ(0)'
+      }
+    : {
+        overscrollBehavior: 'contain',
+        WebkitOverflowScrolling: 'touch',
+        scrollBehavior: 'smooth',
+        WebkitTransform: 'translateZ(0)',
+        transform: 'translateZ(0)',
+        willChange: 'scroll-position'
+      };
+
+  const containerClassName = useWindowScroll
+    ? `relative w-full ${className}`.trim()
+    : `relative w-full h-full overflow-y-auto overflow-x-visible hide-scrollbar ${className}`.trim();
+
+  return (
+    <>
+      <style jsx global>{`
+        .hide-scrollbar {
+          scrollbar-width: none; /* Firefox */
+          -ms-overflow-style: none; /* IE and Edge */
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none; /* Chrome, Safari, Opera */
+        }
+      `}</style>
+      <div className={containerClassName} ref={scrollerRef} style={containerStyles}>
+        <div className="scroll-stack-inner pt-[20vh] px-20 pb-[50rem] min-h-screen">
+          {children}
+          <div className="scroll-stack-end w-full h-px" />
+        </div>
+      </div>
+    </>
+  );
+};
 
 
 const AboutComp = () => {
@@ -72,17 +408,123 @@ const AboutComp = () => {
             >
               <div className="h-full">
                 <ScrollStack>
+                  {/* 01 */}
                   <ScrollStackItem>
-                    <h2>Card 1</h2>
-                    <p>This is the first card in the stack</p>
+                    <div className='grid grid-cols-1 md:grid-cols-2 gap-8 items-start'>
+                      <div>
+                        <div className='text-6xl md:text-7xl font-sans font-semibold tracking-tight text-black'>01</div>
+                        <h2 className='mt-2 text-4xl md:text-5xl font-sans font-bold tracking-tight text-black'>We talk first</h2>
+                      </div>
+                      <div>
+                        <p className='text-black text-lg md:text-xl leading-relaxed font-light font-serif tracking-wide'>
+                          We don’t start with strategy decks, we start with you. Over honest conversation, we explore your origin, your quirks, your why. What makes your heartbeat? What’s not working? What do you wish people understood about you? This isn't about briefings or deliverables. No rush, no slide decks. Just truth.
+                        </p>
+                        <div className='mt-6 flex flex-wrap gap-3 items-center'>
+                          <span className='px-4 py-2 rounded-full bg-green-100 text-green-900 text-sm'>Raw Notes</span>
+                          <span className='px-4 py-2 rounded-full bg-purple-100 text-purple-900 text-sm'>Pain Points</span>
+                          <span className='px-4 py-2 rounded-full bg-blue-100 text-blue-900 text-sm'>Project Intent</span>
+                        </div>
+                      </div>
+                    </div>
                   </ScrollStackItem>
+
+                  {/* 02 */}
                   <ScrollStackItem>
-                    <h2>Card 2</h2>
-                    <p>This is the second card in the stack</p>
+                    <div className='grid grid-cols-1 md:grid-cols-2 gap-8 items-start'>
+                      <div>
+                        <div className='text-6xl md:text-7xl font-sans font-semibold tracking-tight text-black'>02</div>
+                        <h2 className='mt-2 text-4xl md:text-5xl font-sans font-bold tracking-tight text-black'>We find the thing</h2>
+                      </div>
+                      <div>
+                        <p className='text-black text-lg md:text-xl leading-relaxed font-light font-serif tracking-wide'>
+                          There’s always a center. A heartbeat. Sometimes it’s hiding behind market lingo or buried in a product roadmap. But it’s there. That truth at the core of what you do. This becomes our north star. The filter for every creative decision that follows.
+                        </p>
+                        <div className='mt-6 flex flex-wrap gap-3 items-center'>
+                          <span className='px-4 py-2 rounded-full bg-green-100 text-green-900 text-sm'>Creative Brief</span>
+                          <span className='px-4 py-2 rounded-full bg-purple-100 text-purple-900 text-sm'>Brand Position</span>
+                          <span className='px-4 py-2 rounded-full bg-blue-100 text-blue-900 text-sm'>North Star</span>
+                          <span className='px-4 py-2 rounded-full bg-amber-100 text-amber-900 text-sm'>Brand Strategy</span>
+                        </div>
+                      </div>
+                    </div>
                   </ScrollStackItem>
+
+                  {/* 03 */}
                   <ScrollStackItem>
-                    <h2>Card 3</h2>
-                    <p>This is the third card in the stack</p>
+                    <div className='grid grid-cols-1 md:grid-cols-2 gap-8 items-start'>
+                      <div>
+                        <div className='text-6xl md:text-7xl font-sans font-semibold tracking-tight text-black'>03</div>
+                        <h2 className='mt-2 text-4xl md:text-5xl font-sans font-bold tracking-tight text-black'>We explore</h2>
+                      </div>
+                      <div>
+                        <p className='text-black text-lg md:text-xl leading-relaxed font-light font-serif tracking-wide'>
+                          Moodboards, Scrappy sketches, Chasing hunches. This is where we go radio silent, only because we’re exploring things that might fail just to see what else shows up. This phase is messy, intuitive, and alive. It's about letting the idea stretch its legs before it settles into form.
+                        </p>
+                        <div className='mt-6 flex flex-wrap gap-3 items-center'>
+                          <span className='px-4 py-2 rounded-full bg-green-100 text-green-900 text-sm'>Moodboards</span>
+                          <span className='px-4 py-2 rounded-full bg-purple-100 text-purple-900 text-sm'>Experiments</span>
+                          <span className='px-4 py-2 rounded-full bg-blue-100 text-blue-900 text-sm'>Design Explorations</span>
+                        </div>
+                      </div>
+                    </div>
+                  </ScrollStackItem>
+
+                  {/* 04 */}
+                  <ScrollStackItem>
+                    <div className='grid grid-cols-1 md:grid-cols-2 gap-8 items-start'>
+                      <div>
+                        <div className='text-6xl md:text-7xl font-sans font-semibold tracking-tight text-black'>04</div>
+                        <h2 className='mt-2 text-4xl md:text-5xl font-sans font-bold tracking-tight text-black'>We craft</h2>
+                      </div>
+                      <div>
+                        <p className='text-black text-lg md:text-xl leading-relaxed font-light font-serif tracking-wide'>
+                          The raw gets refined. We craft your brand’s visual and verbal world: type, tone, color, story. Not just what looks good, but what feels true. Every decision earns its place.
+                        </p>
+                        <div className='mt-6 flex flex-wrap gap-3 items-center'>
+                          <span className='px-4 py-2 rounded-full bg-green-100 text-green-900 text-sm'>Brand Identity</span>
+                          <span className='px-4 py-2 rounded-full bg-purple-100 text-purple-900 text-sm'>Voice, Values</span>
+                          <span className='px-4 py-2 rounded-full bg-blue-100 text-blue-900 text-sm'>Key Applications</span>
+                        </div>
+                      </div>
+                    </div>
+                  </ScrollStackItem>
+
+                  {/* 05 */}
+                  <ScrollStackItem>
+                    <div className='grid grid-cols-1 md:grid-cols-2 gap-8 items-start'>
+                      <div>
+                        <div className='text-6xl md:text-7xl font-sans font-semibold tracking-tight text-black'>05</div>
+                        <h2 className='mt-2 text-4xl md:text-5xl font-sans font-bold tracking-tight text-black'>We make it real</h2>
+                      </div>
+                      <div>
+                        <p className='text-black text-lg md:text-xl leading-relaxed font-light font-serif tracking-wide'>
+                          Together, we set your brand free, fully formed, beautifully wild. All the tools you need: delivered with care. Brand guidelines, assets, and the story that ties it all together.
+                        </p>
+                        <div className='mt-6 flex flex-wrap gap-3 items-center'>
+                          <span className='px-4 py-2 rounded-full bg-green-100 text-green-900 text-sm'>Final Delivery</span>
+                          <span className='px-4 py-2 rounded-full bg-purple-100 text-purple-900 text-sm'>Brand Guidelines</span>
+                          <span className='px-4 py-2 rounded-full bg-blue-100 text-blue-900 text-sm'>Celebrations</span>
+                        </div>
+                      </div>
+                    </div>
+                  </ScrollStackItem>
+
+                  {/* 06 */}
+                  <ScrollStackItem>
+                    <div className='grid grid-cols-1 md:grid-cols-2 gap-8 items-start'>
+                      <div>
+                        <div className='text-6xl md:text-7xl font-sans font-semibold tracking-tight text-black'>06</div>
+                        <h2 className='mt-2 text-4xl md:text-5xl font-sans font-bold tracking-tight text-black'>Keep the flame</h2>
+                      </div>
+                      <div>
+                        <p className='text-black text-lg md:text-xl leading-relaxed font-light font-serif tracking-wide'>
+                          Branding isn’t a one-night stand, it’s a long-term relationship. If you want, we stick around. Whether it’s evolving the brand, shaping campaigns, or just giving advice when things get weird, we’re here.
+                        </p>
+                        <div className='mt-6 flex flex-wrap gap-3 items-center'>
+                          <span className='px-4 py-2 rounded-full bg-green-100 text-green-900 text-sm'>New Beginnings</span>
+                        </div>
+                      </div>
+                    </div>
                   </ScrollStackItem>
                 </ScrollStack>
               </div>

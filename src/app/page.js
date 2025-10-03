@@ -210,7 +210,37 @@ const Page = () => {
         .is-visible { opacity: 1; transform: translate3d(0, 0, 0); }
       `}</style>
       <Navbar />
-      <div className='h-[100vh] bg-[oklch(0.98_0.005_95)] flex flex-col items-center justify-center text-center'>
+      <div className='h-[100vh] bg-[oklch(0.98_0.005_95)] relative overflow-hidden flex flex-col items-center justify-center text-center'>
+        {/* Background layers */}
+        <div className='absolute inset-0 pointer-events-none' aria-hidden>
+          {/* Subtle radial glow center */}
+          <div
+            className='absolute inset-0'
+            style={{
+              background:
+                'radial-gradient(1200px 700px at 50% 40%, rgba(0,0,0,0.06), rgba(0,0,0,0.02), rgba(255,255,255,0))'
+            }}
+          />
+          {/* Soft grid */}
+          <div
+            className='absolute inset-0 opacity-[0.08]'
+            style={{
+              backgroundImage:
+                'linear-gradient(to right, rgba(0,0,0,0.6) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.6) 1px, transparent 1px)',
+              backgroundSize: '48px 48px'
+            }}
+          />
+          {/* Gradient orbs */}
+          <div className='absolute -top-24 -left-24 h-80 w-80 rounded-full blur-3xl opacity-30'
+               style={{ background: 'radial-gradient(circle at 30% 30%, rgba(10,120,200,0.35), rgba(10,120,200,0))' }} />
+          <div className='absolute -bottom-20 -right-28 h-96 w-96 rounded-full blur-3xl opacity-30'
+               style={{ background: 'radial-gradient(circle at 60% 40%, rgba(180,60,200,0.35), rgba(180,60,200,0))' }} />
+          <div className='absolute bottom-24 left-1/3 h-72 w-72 rounded-full blur-[70px] opacity-25'
+               style={{ background: 'radial-gradient(circle at 50% 50%, rgba(0,140,120,0.35), rgba(0,140,120,0))' }} />
+          {/* Vignette */}
+          <div className='absolute inset-0'
+               style={{ background: 'radial-gradient(100% 80% at 50% 50%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.08) 100%)' }} />
+        </div>
         <h1 
           ref={socialLiftsRef}
           className='font-coign uppercase text-black whitespace-pre-line leading-[0.8] tracking-[-0.015em] text-[38vw] md:text-[22vw] lg:text-[18vw] font-bold'
@@ -387,9 +417,9 @@ const Page = () => {
         />
             <div className='relative max-w-6xl mx-auto px-6 md:px-8 lg:px-10'>
           <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-20 gap-y-20 md:gap-y-24'>
-            <AnimatedStat number='12+' caption='Years Experience' />
-            <AnimatedStat number='50+' caption='Brands Transformed' />
-            <AnimatedStat number='14' caption='Categories Disrupted' />
+          <AnimatedStat number='3+' caption='Years Experience' />
+            <AnimatedStat number='11+' caption='Brands Transformed' />
+            <AnimatedStat number='5+' caption='Categories Disrupted' />
             <AnimatedStat number='7+' caption='Countries Reached' />
             <AnimatedStat number='70%' caption='Repeat Clients' />
             <AnimatedStat number='3' caption='In-house Brands' />
