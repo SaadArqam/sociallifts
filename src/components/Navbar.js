@@ -101,14 +101,6 @@ const Navbar = () => {
               <img src="/img/logo.png" alt="logo" className="w-10" />
             </Link>
 
-            <Button
-              id="products-button"
-              title="Contact"
-              href="/contact"
-              target="_blank"
-              rightIcon={<TiLocationArrow />}
-              containerClass="bg-white text-black md:flex hidden items-center justify-center gap-1"
-            />
           </div>
 
           {/* Nav Links + Audio */}
@@ -116,14 +108,22 @@ const Navbar = () => {
             <div className="hidden md:block">
               {navItems.map((item) => (
                 <Link
-                  key={typeof item === "string" ? item : item.label}
-                  href={getNavLink(item)}
-                  className="nav-hover-btn"
+                key={typeof item === "string" ? item : item.label}
+                href={getNavLink(item)}
+                className="nav-hover-btn"
                 >
                   {typeof item === "string" ? item : item.label}
                 </Link>
               ))}
             </div>
+              <Button
+                id="products-button"
+                title="Contact"
+                href="/contact"
+                target="_blank"
+                rightIcon={<TiLocationArrow />}
+                containerClass="bg-white text-black md:flex hidden items-center justify-center gap-1"
+              />
 
             <button
               className="ml-10 flex items-center space-x-0.5"

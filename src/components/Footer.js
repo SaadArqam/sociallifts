@@ -100,8 +100,8 @@ const Footer = () => {
                 aria-hidden
               />
               <div className='relative text-[13px] leading-relaxed tracking-wide space-y-1 px-6 py-5'>
-                <div>hi@bykins.com</div>
-                <div>+91 9876543210</div>
+                <div>contact.sociallifts@gmail.com</div>
+                {/* <div>+91 9876543210</div> */}
                 <div className='text-[12px] opacity-60'>© All rights reserved</div>
               </div>
             </div>

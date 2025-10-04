@@ -323,7 +323,7 @@ const Page = () => {
             <div className='bg-gradient-to-br from-purple-100 to-purple-50 rounded-3xl p-10 md:p-12 h-full hover:shadow-lg transition-all duration-300 min-h-[420px]'>
               <h3 className='text-3xl md:text-4xl font-medium text-purple-900 mb-8 tracking-wide'>Branding</h3>
               <p className='text-gray-700 mb-10 text-base md:text-lg leading-relaxed font-light'>
-                You need a brand identity that's unmistakably you. We build visual and verbal identities that scale, stand out, and stick.
+                You need a brand identity that&#39;s unmistakably you. We build visual and verbal identities that scale, stand out, and stick.
               </p>
               <ul className='space-y-4 text-base text-gray-800 font-light'>
                 <li className='flex items-center'><span className='w-1.5 h-1.5 bg-purple-400 rounded-full mr-3'></span>Art Direction</li>
@@ -356,7 +356,7 @@ const Page = () => {
             <div className='bg-gradient-to-br from-pink-100 to-pink-50 rounded-3xl p-10 md:p-12 h-full hover:shadow-lg transition-all duration-300 min-h-[420px]'>
               <h3 className='text-3xl md:text-4xl font-medium text-pink-900 mb-8 tracking-wide'>Website</h3>
               <p className='text-gray-700 mb-10 text-base md:text-lg leading-relaxed font-light'>
-                Your website isn't a brochure, it's your brand's beating heart online. We design websites that don't just look great; they convert, connect, and move.
+                Your website isn&#39;t a brochure, it&#39;s your brand&#39;s beating heart online. We design websites that don&#39;t just look great; they convert, connect, and move.
               </p>
               <ul className='space-y-4 text-base text-gray-800 font-light'>
                 <li className='flex items-center'><span className='w-1.5 h-1.5 bg-pink-400 rounded-full mr-3'></span>User Experience</li>
@@ -367,7 +367,6 @@ const Page = () => {
                 <li className='flex items-center'><span className='w-1.5 h-1.5 bg-pink-400 rounded-full mr-3'></span>Digital Design</li>
               </ul>
             </div>
-
             {/* Campaigns Card */}
             <div className='bg-gradient-to-br from-blue-100 to-blue-50 rounded-3xl p-10 md:p-12 h-full hover:shadow-lg transition-all duration-300 min-h-[420px]'>
               <h3 className='text-3xl md:text-4xl font-medium text-blue-900 mb-8 tracking-wide'>Campaigns</h3>

@@ -1,4 +1,5 @@
 import React from 'react'
+import Footer from './Footer'
 
 const Contact = () => {
   return (
@@ -37,12 +38,13 @@ const Contact = () => {
         <div className='max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 mt-12'>
           <h3 className='text-2xl md:text-3xl text-black'>Or reachout to</h3>
           <div className='text-neutral-900 space-y-1'>
-            <p>email@sociallifts.com</p>
-            <p>+91 9970271026</p>
-            <p>linkedin</p>
+            <p>contact.sociallifts@gmail.com</p>
+            {/* <p>+91 9970271026</p> */}
+            {/* <p>linkedin</p> */}
           </div>
         </div>
       </div>
+      <Footer />
     </section>
   )
 }

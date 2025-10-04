@@ -1,6 +1,7 @@
 "use client"
 import React, { useLayoutEffect, useRef, useCallback } from 'react'
 import Lenis from 'lenis'
+import Footer from './Footer';
 
 // Inline ScrollStack components so cards live in the same file
 const ScrollStackItem = ({ children, itemClassName = '' }) => (
@@ -378,7 +379,7 @@ const AboutComp = () => {
                 <div className='max-w-3xl ml-auto pr-8 md:pr-16'>
                     <div className='space-y-6'>
                         <p className='text-black text-lg md:text-xl leading-relaxed font-light font-serif tracking-wide'>
-                            At Social Lifts, we believe growth shouldn&apos;t be chaotic. That&apos;s why we built a full-funnel creative and growth team under one roof—video editors, designers, social media strategists, web developers, and SEO experts all working as one seamless engine.
+                            At Social Lifts, we believe growth shouldn&#39;;t be chaotic. That&#39;;s why we built a full-funnel creative and growth team under one roof—video editors, designers, social media strategists, web developers, and SEO experts all working as one seamless engine.
                         </p>
                         
                         <p className='text-black text-lg md:text-xl leading-relaxed font-light font-serif tracking-wide'>
@@ -386,7 +387,7 @@ const AboutComp = () => {
                         </p>
                         
                         <p className='text-black text-lg md:text-xl leading-relaxed font-light font-serif tracking-wide'>
-                            We craft creative that stops the scroll—cinematic edits, bold visuals, and platform-native content designed for today&apos;s fast-moving algorithms. With benefit-first messaging and engaging narratives, we don&apos;t just get attention, we keep it.
+                            We craft creative that stops the scroll—cinematic edits, bold visuals, and platform-native content designed for today&#39;;s fast-moving algorithms. With benefit-first messaging and engaging narratives, we don&#39;;t just get attention, we keep it.
                         </p>
                         
                         <p className='text-black text-lg md:text-xl leading-relaxed font-light font-serif tracking-wide'>
@@ -417,7 +418,7 @@ const AboutComp = () => {
                       </div>
                       <div>
                         <p className='text-black text-lg md:text-xl leading-relaxed font-light font-serif tracking-wide'>
-                          We don’t start with strategy decks, we start with you. Over honest conversation, we explore your origin, your quirks, your why. What makes your heartbeat? What’s not working? What do you wish people understood about you? This isn't about briefings or deliverables. No rush, no slide decks. Just truth.
+                          We don&#39;t start with strategy decks, we start with you. Over honest conversation, we explore your origin, your quirks, your why. What makes your heartbeat? What&#39;s not working? What do you wish people understood about you? This isn&#39;t about briefings or deliverables. No rush, no slide decks. Just truth.
                         </p>
                         <div className='mt-6 flex flex-wrap gap-3 items-center'>
                           <span className='px-4 py-2 rounded-full bg-green-100 text-green-900 text-sm'>Raw Notes</span>
@@ -458,7 +459,7 @@ const AboutComp = () => {
                       </div>
                       <div>
                         <p className='text-black text-lg md:text-xl leading-relaxed font-light font-serif tracking-wide'>
-                          Moodboards, Scrappy sketches, Chasing hunches. This is where we go radio silent, only because we’re exploring things that might fail just to see what else shows up. This phase is messy, intuitive, and alive. It's about letting the idea stretch its legs before it settles into form.
+                          Moodboards, Scrappy sketches, Chasing hunches. This is where we go radio silent, only because we&#39;re exploring things that might fail just to see what else shows up. This phase is messy, intuitive, and alive. It&#39;s about letting the idea stretch its legs before it settles into form.
                         </p>
                         <div className='mt-6 flex flex-wrap gap-3 items-center'>
                           <span className='px-4 py-2 rounded-full bg-green-100 text-green-900 text-sm'>Moodboards</span>
@@ -552,6 +553,7 @@ const AboutComp = () => {
                 }
             `}</style>
 
+<Footer />
         </section>
     )
 }
