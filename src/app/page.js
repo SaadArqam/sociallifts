@@ -7,7 +7,7 @@ import { TiLocationArrow } from "react-icons/ti";
 import Navbar from '../components/Navbar'
 import AnimatedTitle from '@/components/AnimatedTitle'
 import AnimatedText from '@/components/AnimatedText'
-import VideoSection from '../components/videosection' // Add id to this component for navbar linking
+import VideoSection from '../components/videosection'
 import About from '../components/About'
 import Footer from '../components/Footer'
 import AnimatedStat from '../components/AnimatedStat'
@@ -114,23 +114,6 @@ const Page = () => {
     }, 2000)
 
     return () => clearTimeout(timer)
-  }, [])
-  
-  // Handle section parameter for navigation from other pages
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      const section = params.get('section');
-      
-      if (section === 'work') {
-        setTimeout(() => {
-          const workSection = document.getElementById('work');
-          if (workSection) {
-            workSection.scrollIntoView({ behavior: 'smooth' });
-          }
-        }, 100); // Small delay to ensure DOM is ready
-      }
-    }
   }, [])
 
 
@@ -283,7 +266,7 @@ const Page = () => {
 <section id='exceptional' className='w-full bg-[oklch(0.98_0.005_95)] relative py-24 md:py-32'>
         <div className='max-w-8xl mx-auto px-6 md:px-8 lg:px-10'>
           {/* Main Heading */}
-          <h1 className='text-5xl md:text-6xl lg:text-7xl font-light text-black text-center mb-24 tracking-tight leading-tight'>
+          <h1 className='text-black text-center text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-[1.15] tracking-wide max-w-4xl mx-auto mb-24'>
             What We Do, Exceptionally.
           </h1>
 
@@ -428,6 +411,39 @@ const Page = () => {
         </div>
       </section>
 
+      {/* Testimonials Section */}
+      <section className='w-full my-24 overflow-hidden'>
+        <div className='max-w-4xl mx-auto bg-gradient-to-b from-pink-200/90 to-pink-100/90 rounded-[32px] px-6 md:px-10 lg:px-12 py-28'>
+          <h2 className='text-4xl md:text-5xl lg:text-6xl text-center text-white font-medium mb-20'>
+            What leaders say<br />
+            about working with<br />
+            Kins
+          </h2>
+          
+          <div className='space-y-20 max-w-2xl mx-auto'>
+            <div className='text-center'>
+              <p className='text-white text-xl md:text-2xl mb-6 leading-relaxed'>
+                "Kins has been a total game-changer: creative, professional, and deeply in sync with our brand. They deliver beyond expectations and feel like part of the team."
+              </p>
+              <p className='text-white/80 text-sm'>Big Startup, CEO & Founder of Company</p>
+            </div>
+            
+            <div className='text-center'>
+              <p className='text-white text-xl md:text-2xl mb-6 leading-relaxed'>
+                "They got too good and popular that they don't have time. Now it's on you to be the kind of client they can't say no to."
+              </p>
+              <p className='text-white/80 text-sm'>Marketing Lead, Founder of Company</p>
+            </div>
+            
+            <div className='text-center'>
+              <p className='text-white text-xl md:text-2xl mb-6 leading-relaxed'>
+                "If you want more than just a brand, if you want a story people feel, Kins is who you need."
+              </p>
+              <p className='text-white/80 text-sm'>Global Director of Media, Multinational Brand</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* <Contact /> */}
       <Footer />
