@@ -18,30 +18,28 @@ const AnimatedText = ({
     const chars = containerRef.current.querySelectorAll('.animated-char')
     if (chars.length === 0) return
 
-    // Set initial state - exactly matching Bykins.com
+    // Set initial state - left to right animation
     gsap.set(chars, {
       opacity: 0,
-      y: "120%",
-      rotateX: -90,
-      transformOrigin: "50% 100%",
+      x: "-100%",
+      transformOrigin: "0% 50%",
       transformStyle: "preserve-3d",
-      filter: "blur(20px)"
+      filter: "blur(8px)"
     })
 
-    // Create the main animation timeline
+    // Create the main animation timeline with reduced delay
     const tl = gsap.timeline({
-      delay: delay
+      delay: 0.2 // Reduced delay for faster loading
     })
 
-    // Main reveal animation - exactly matching Bykins.com
+    // Main reveal animation - left to right
     tl.to(chars, {
       opacity: 1,
-      y: "0%",
-      rotateX: 0,
+      x: "0%",
       filter: "blur(0px)",
-      duration: duration,
-      ease: "power2.out", // Bykins uses power2 for smoother animation
-      stagger: stagger,
+      duration: 0.8, // Faster animation
+      ease: "power3.out",
+      stagger: 0.04, // Faster stagger between letters
       transformOrigin: "50% 50% 0"
     })
 

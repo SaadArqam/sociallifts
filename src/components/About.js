@@ -4,16 +4,18 @@ import AnimatedTitle from './AnimatedTitle'
 const About = () => {
   return (
     <section id='about' className='w-full min-h-screen flex flex-col items-center justify-start pt-24 px-4 relative overflow-hidden' style={{ backgroundColor: 'oklch(0.98 0.005 95)' }}>
-      {/* Soft grid pattern that continues from landing page - no border */}
+      {/* Subtle dot pattern - more professional than grid lines */}
       <div
-        className='absolute inset-0 opacity-[0.06]'
+        className='absolute inset-0 opacity-[0.04]'
         style={{
-          backgroundImage:
-            'linear-gradient(to right, rgba(0,0,0,0.6) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.6) 1px, transparent 1px)',
-          backgroundSize: '48px 48px',
-          marginTop: '-1px' // Remove the border line by offsetting the grid
+          backgroundImage: `radial-gradient(circle, rgba(0,0,0,0.4) 1px, transparent 1px)`,
+          backgroundSize: '24px 24px',
+          marginTop: '-1px'
         }}
       />
+      
+      {/* Subtle gradient overlay for depth */}
+      <div className='absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[rgba(255,255,255,0.4)]'></div>
       
       <h1
         className='font-coign font-black uppercase text-black text-center whitespace-pre-line leading-[0.8] tracking-[-0.015em] text-[38vw] md:text-[22vw] lg:text-[18vw] relative z-10'
