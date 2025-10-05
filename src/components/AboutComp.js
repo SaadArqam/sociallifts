@@ -6,11 +6,12 @@ import Footer from './Footer';
 // Inline ScrollStack components so cards live in the same file
 const ScrollStackItem = ({ children, itemClassName = '' }) => (
     <div
-      className={`scroll-stack-card relative w-full h-80 my-8 p-12 rounded-[40px] shadow-[0_0_30px_rgba(0,0,0,0.1)] box-border origin-top will-change-transform bg-[oklch(1_0_0)] ${itemClassName}`.trim()}
+      className={`scroll-stack-card relative w-full h-80 my-8 p-12 rounded-[40px] shadow-[0_0_40px_rgba(0,0,0,0.08)] box-border origin-top will-change-transform bg-[oklch(1_0_0)] border border-[oklch(0.95_0.005_95)] ${itemClassName}`.trim()}
       style={{
         backfaceVisibility: 'hidden',
         transformStyle: 'preserve-3d',
-        opacity: 1
+        opacity: 1,
+        transition: 'box-shadow 0.3s ease-out'
       }}>
       {children}
     </div>
@@ -19,14 +20,14 @@ const ScrollStackItem = ({ children, itemClassName = '' }) => (
 const ScrollStack = ({
   children,
   className = '',
-  itemDistance = 100,
-  itemScale = 0.03,
-  itemStackDistance = 30,
-  stackPosition = '20%',
-  scaleEndPosition = '10%',
-  baseScale = 0.85,
+  itemDistance = 120,
+  itemScale = 0.02,
+  itemStackDistance = 25,
+  stackPosition = '25%',
+  scaleEndPosition = '15%',
+  baseScale = 0.88,
   rotationAmount = 0,
-  blurAmount = 0,
+  blurAmount = 0.5,
   useWindowScroll = false,
   onStackComplete
 }) => {
@@ -103,8 +104,10 @@ const ScrollStack = ({
 
       const scaleProgress = calculateProgress(scrollTop, triggerStart, triggerEnd);
       const targetScale = baseScale + i * itemScale;
-      const scale = 1 - scaleProgress * (1 - targetScale);
-      const rotation = rotationAmount ? i * rotationAmount * scaleProgress : 0;
+      // Enhanced easing for smoother scaling
+      const easedProgress = 1 - Math.pow(1 - scaleProgress, 3);
+      const scale = 1 - easedProgress * (1 - targetScale);
+      const rotation = rotationAmount ? i * rotationAmount * easedProgress : 0;
 
       let blur = 0;
       if (blurAmount) {
@@ -119,7 +122,8 @@ const ScrollStack = ({
 
         if (i < topCardIndex) {
           const depthInStack = topCardIndex - i;
-          blur = Math.max(0, depthInStack * blurAmount);
+          // Enhanced blur with exponential falloff for more natural depth
+          blur = Math.max(0, depthInStack * blurAmount * Math.pow(0.8, depthInStack));
         }
       }
 
@@ -134,7 +138,7 @@ const ScrollStack = ({
 
       const newTransform = {
         translateY: Math.round(translateY * 100) / 100,
-        scale: Math.round(scale * 1000) / 1000,
+        scale: Math.round(scale * 10000) / 10000,
         rotation: Math.round(rotation * 100) / 100,
         blur: Math.round(blur * 100) / 100
       };
@@ -142,10 +146,10 @@ const ScrollStack = ({
       const lastTransform = lastTransformsRef.current.get(i);
       const hasChanged =
         !lastTransform ||
-        Math.abs(lastTransform.translateY - newTransform.translateY) > 0.1 ||
-        Math.abs(lastTransform.scale - newTransform.scale) > 0.001 ||
-        Math.abs(lastTransform.rotation - newTransform.rotation) > 0.1 ||
-        Math.abs(lastTransform.blur - newTransform.blur) > 0.1;
+        Math.abs(lastTransform.translateY - newTransform.translateY) > 0.05 ||
+        Math.abs(lastTransform.scale - newTransform.scale) > 0.0001 ||
+        Math.abs(lastTransform.rotation - newTransform.rotation) > 0.05 ||
+        Math.abs(lastTransform.blur - newTransform.blur) > 0.05;
 
       if (hasChanged) {
         const transform = `translate3d(0, ${newTransform.translateY}px, 0) scale(${newTransform.scale}) rotate(${newTransform.rotation}deg)`;
@@ -153,6 +157,11 @@ const ScrollStack = ({
 
         card.style.transform = transform;
         card.style.filter = filter;
+        
+        // Add subtle shadow enhancement based on stack position
+        const shadowIntensity = Math.max(0.08, 0.08 - (i * 0.01));
+        const shadowBlur = Math.max(30, 40 - (i * 2));
+        card.style.boxShadow = `0 0 ${shadowBlur}px rgba(0,0,0,${shadowIntensity})`;
 
         lastTransformsRef.current.set(i, newTransform);
       }
@@ -192,15 +201,15 @@ const ScrollStack = ({
   const setupLenis = useCallback(() => {
     if (useWindowScroll) {
       const lenis = new Lenis({
-        duration: 1.2,
+        duration: 1.4,
         easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         smoothWheel: true,
-        touchMultiplier: 2,
+        touchMultiplier: 2.5,
         infinite: false,
-        wheelMultiplier: 1,
-        lerp: 0.1,
+        wheelMultiplier: 1.2,
+        lerp: 0.08,
         syncTouch: true,
-        syncTouchLerp: 0.075
+        syncTouchLerp: 0.05
       });
 
       lenis.on('scroll', handleScroll);
@@ -220,15 +229,15 @@ const ScrollStack = ({
       const lenis = new Lenis({
         wrapper: scroller,
         content: scroller.querySelector('.scroll-stack-inner'),
-        duration: 1.2,
+        duration: 1.4,
         easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         smoothWheel: true,
-        touchMultiplier: 2,
+        touchMultiplier: 2.5,
         infinite: false,
-        wheelMultiplier: 1,
-        lerp: 0.1,
+        wheelMultiplier: 1.2,
+        lerp: 0.08,
         syncTouch: true,
-        syncTouchLerp: 0.075
+        syncTouchLerp: 0.05
       });
 
       lenis.on('scroll', handleScroll);
@@ -329,9 +338,21 @@ const ScrollStack = ({
         .hide-scrollbar::-webkit-scrollbar {
           display: none; /* Chrome, Safari, Opera */
         }
+        .scroll-stack-card {
+          will-change: transform, filter;
+          transform: translateZ(0);
+          -webkit-transform: translateZ(0);
+          backface-visibility: hidden;
+          -webkit-backface-visibility: hidden;
+          perspective: 1000px;
+          -webkit-perspective: 1000px;
+        }
+        .scroll-stack-card:hover {
+          box-shadow: 0 0 50px rgba(0,0,0,0.12) !important;
+        }
       `}</style>
       <div className={containerClassName} ref={scrollerRef} style={containerStyles}>
-        <div className="scroll-stack-inner pt-[20vh] px-20 pb-[50rem] min-h-screen">
+        <div className="scroll-stack-inner pt-[25vh] px-20 pb-[60rem] min-h-screen">
           {children}
           <div className="scroll-stack-end w-full h-px" />
         </div>
@@ -401,7 +422,7 @@ const AboutComp = () => {
             <div
               className="w-full max-w-8xl mx-auto my-24 hide-scrollbar"
               style={{
-                height: "600px",
+                height: "700px",
                 overflowY: "auto",
                 scrollbarWidth: "none", // Firefox
                 msOverflowStyle: "none" // IE/Edge

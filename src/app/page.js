@@ -6,12 +6,14 @@ import 'ldrs/react/Waveform.css'
 import { TiLocationArrow } from "react-icons/ti";
 import Navbar from '../components/Navbar'
 import AnimatedTitle from '@/components/AnimatedTitle'
-import VideoSection from '../components/videosection'
+import AnimatedText from '@/components/AnimatedText'
+import VideoSection from '../components/videosection' // Add id to this component for navbar linking
 import About from '../components/About'
 import Footer from '../components/Footer'
 import AnimatedStat from '../components/AnimatedStat'
 import Link from 'next/link'
 import Button from '../components/Button'
+import CDPlayer from '../components/CDPlayer'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/all'
 
@@ -24,7 +26,6 @@ const Page = () => {
   const whyUsSectionRef = useRef(null)
   const whyUsTitleRef = useRef(null)
   const [whyUsShiftY, setWhyUsShiftY] = useState(0)
-  const socialLiftsRef = useRef(null)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -114,60 +115,24 @@ const Page = () => {
 
     return () => clearTimeout(timer)
   }, [])
-
-  // Social Lifts appear animation - sleek and professional
+  
+  // Handle section parameter for navigation from other pages
   useEffect(() => {
-    if (!socialLiftsRef.current) return
-
-    const words = socialLiftsRef.current.querySelectorAll('.social-word')
-    if (words.length === 0) return
-
-    // Set initial state with more sophisticated transforms
-    gsap.set(words, { 
-      opacity: 0, 
-      y: 100, 
-      scale: 0.7,
-      rotationX: 45,
-      transformOrigin: "center center",
-      filter: "blur(10px)"
-    })
-
-    const tl = gsap.timeline({
-      delay: 0.5 // Shorter delay to ensure it triggers
-    })
-
-    tl.to(words, {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      rotationX: 0,
-      filter: "blur(0px)",
-      duration: 1.4,
-      ease: "power4.out",
-      stagger: {
-        amount: 0.6,
-        from: "center"
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const section = params.get('section');
+      
+      if (section === 'work') {
+        setTimeout(() => {
+          const workSection = document.getElementById('work');
+          if (workSection) {
+            workSection.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 100); // Small delay to ensure DOM is ready
       }
-    })
-    .to(words, {
-      y: -5,
-      duration: 0.3,
-      ease: "power2.out",
-      stagger: {
-        amount: 0.3,
-        from: "center"
-      }
-    }, "-=0.2")
-    .to(words, {
-      y: 0,
-      duration: 0.4,
-      ease: "bounce.out",
-      stagger: {
-        amount: 0.3,
-        from: "center"
-      }
-    })
-  }, []) // Remove isLoading dependency to ensure it runs
+    }
+  }, [])
+
 
   if (isLoading) {
     return (
@@ -199,6 +164,7 @@ const Page = () => {
         .bounce-animation {
           animation: bounce 2s infinite;
         }
+
         @keyframes pulse {
           0%, 100% { opacity: 0.3; }
           50% { opacity: 0.8; }
@@ -241,13 +207,17 @@ const Page = () => {
           <div className='absolute inset-0'
                style={{ background: 'radial-gradient(100% 80% at 50% 50%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.08) 100%)' }} />
         </div>
-        <h1 
-          ref={socialLiftsRef}
-          className='font-coign uppercase text-black whitespace-pre-line leading-[0.8] tracking-[-0.015em] text-[38vw] md:text-[22vw] lg:text-[18vw] font-bold'
-        >
-          <span className='social-word inline-block'>SOCIAL</span>{' '}
-          <span className='social-word inline-block'>LIFTS</span>
-        </h1>
+        <AnimatedText 
+          text="SOCIAL LIFTS"
+          className='font-coign uppercase text-black leading-[0.8] tracking-[-0.015em] text-[38vw] md:text-[22vw] lg:text-[18vw] font-bold'
+          delay={0.5}
+          stagger={0.08}
+          duration={1.2}
+          ease="power2.out"
+        />
+        
+        {/* CD Player for audio control */}
+        <CDPlayer />
         
         {/* Enhanced scroll indicator */}
         <div className='absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center'>
