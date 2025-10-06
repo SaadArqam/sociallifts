@@ -23,7 +23,7 @@ const About = () => {
         {`WORK THAT\nHITS YOU RIGHT\nIN THE FEELS`}
       </h1>
       <p className='max-w-3xl mx-auto mt-16 text-neutral-800 text-base md:text-lg leading-relaxed text-center relative z-10'>
-        That's why we exist.
+        That&apos;s why we exist.
       </p>
     </section>
   )

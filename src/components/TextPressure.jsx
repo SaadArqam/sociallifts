@@ -3,11 +3,11 @@
 import { useEffect, useRef, useState } from 'react';
 
 const TextPressure = ({
-  text = 'SOCIAL LIFTS',
+  text = &apos;SOCIAL LIFTS&apos;,
   // fontFamily = 'Compressa VF',
-  fontFamily = 'CoignProBold',
+  fontFamily = &apos;CoignProBold&apos;,
   // This font is just an example, you should not use it in commercial projects.
-  fontUrl = 'https://res.cloudinary.com/dr6lvwubh/raw/upload/v1529908256/CompressaPRO-GX.woff2',
+  fontUrl = &apos;https://res.cloudinary.com/dr6lvwubh/raw/upload/v1529908256/CompressaPRO-GX.woff2&apos;,
 
   width = true,
   weight = true,
@@ -18,10 +18,10 @@ const TextPressure = ({
   stroke = false,
   scale = false,
 
-  textColor = '#FFFFFF',
-  strokeColor = '#FF0000',
+  textColor = &apos;#FFFFFF&apos;,
+  strokeColor = &apos;#FF0000&apos;,
   strokeWidth = 2,
-  className = '',
+  className = &apos;&apos;,
 
   minFontSize = 24
 }) => {
@@ -152,8 +152,8 @@ const TextPressure = ({
       className="relative w-screen h-screen overflow-hidden bg-red-600">
       <style>{`
         @font-face {
-          font-family: '${fontFamily}';
-          src: url('${fontUrl}');
+          font-family: &apos;${fontFamily}&apos;;
+          src: url(&apos;${fontUrl}&apos;);
           font-style: normal;
         }
         .stroke span {
@@ -181,7 +181,7 @@ const TextPressure = ({
           fontSize: fontSize,
           lineHeight,
           transform: `scale(1, ${scaleY})`,
-          transformOrigin: 'center top',
+          transformOrigin: &apos;center top&apos;,
           margin: 0,
           fontWeight: 100,
           color: stroke ? undefined : textColor

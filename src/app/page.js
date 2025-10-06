@@ -423,21 +423,21 @@ const Page = () => {
           <div className='space-y-20 max-w-2xl mx-auto'>
             <div className='text-center'>
               <p className='text-white text-xl md:text-2xl mb-6 leading-relaxed'>
-                "Kins has been a total game-changer: creative, professional, and deeply in sync with our brand. They deliver beyond expectations and feel like part of the team."
+                &quotKins has been a total game-changer: creative, professional, and deeply in sync with our brand. They deliver beyond expectations and feel like part of the team.&quot
               </p>
               <p className='text-white/80 text-sm'>Big Startup, CEO & Founder of Company</p>
             </div>
             
             <div className='text-center'>
               <p className='text-white text-xl md:text-2xl mb-6 leading-relaxed'>
-                "They got too good and popular that they don't have time. Now it's on you to be the kind of client they can't say no to."
+                &quotThey got too good and popular that they don&apos;t have time. Now it&apos;s on you to be the kind of client they can&apos;t say no to.&quot
               </p>
               <p className='text-white/80 text-sm'>Marketing Lead, Founder of Company</p>
             </div>
             
             <div className='text-center'>
               <p className='text-white text-xl md:text-2xl mb-6 leading-relaxed'>
-                "If you want more than just a brand, if you want a story people feel, Kins is who you need."
+                &quotIf you want more than just a brand, if you want a story people feel, Kins is who you need.&quot
               </p>
               <p className='text-white/80 text-sm'>Global Director of Media, Multinational Brand</p>
             </div>

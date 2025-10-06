@@ -479,7 +479,7 @@ const AboutComp = () => {
                       </div>
                       <div>
                         <p className='text-black text-lg md:text-xl leading-relaxed font-light font-serif tracking-wide'>
-                            Moodboards, Scrappy sketches, Chasing hunches. This is where we go radio silent, only because we're exploring things that might fail just to see what else shows up. This phase is messy, intuitive, and alive. It's about letting the idea stretch its legs before it settles into form.
+                            Moodboards, Scrappy sketches, Chasing hunches. This is where we go radio silent, only because we&apos;re exploring things that might fail just to see what else shows up. This phase is messy, intuitive, and alive. It&apos;s about letting the idea stretch its legs before it settles into form.
                         </p>
                         <div className='mt-6 flex flex-wrap gap-3 items-center'>
                           <span className='px-4 py-2 rounded-full bg-green-100 text-green-900 text-sm'>Moodboards</span>
@@ -499,7 +499,7 @@ const AboutComp = () => {
                       </div>
                       <div>
                         <p className='text-black text-lg md:text-xl leading-relaxed font-light font-serif tracking-wide'>
-                            The raw gets refined. We craft your brand's visual and verbal world: type, tone, color, story. Not just what looks good, but what feels true. Every decision earns its place.
+                            The raw gets refined. We craft your brand&apos;s visual and verbal world: type, tone, color, story. Not just what looks good, but what feels true. Every decision earns its place.
                         </p>
                         <div className='mt-6 flex flex-wrap gap-3 items-center'>
                           <span className='px-4 py-2 rounded-full bg-green-100 text-green-900 text-sm'>Brand Identity</span>
@@ -539,7 +539,7 @@ const AboutComp = () => {
                       </div>
                       <div>
                         <p className='text-black text-lg md:text-xl leading-relaxed font-light font-serif tracking-wide'>
-                          Branding isn’t a one-night stand, it’s a long-term relationship. If you want, we stick around. Whether it’s evolving the brand, shaping campaigns, or just giving advice when things get weird, we’re here.
+                          Branding isn&apos;t a one-night stand, it&apos;s a long-term relationship. If you want, we stick around. Whether it&apos;s evolving the brand, shaping campaigns, or just giving advice when things get weird, we&apos;re here.
                         </p>
                         <div className='mt-6 flex flex-wrap gap-3 items-center'>
                           <span className='px-4 py-2 rounded-full bg-green-100 text-green-900 text-sm'>New Beginnings</span>
@@ -556,7 +556,7 @@ const AboutComp = () => {
                 <div className="flex flex-col md:flex-row justify-between items-center">
                     <div className="mb-10 md:mb-0">
                         <h2 className="text-5xl md:text-6xl lg:text-7xl font-medium text-[#2d6cb5] mb-4">
-                            Let's work<br />together
+                            Let&apos;s work<br />together
                         </h2>
                     </div>
                     <div className="flex flex-col items-start">

@@ -14,10 +14,10 @@ const Contact = () => {
       <div className="max-w-6xl mx-auto px-6 md:px-8 relative">
         {/* Hero heading with enhanced size */}
         <h1 className='font-coign uppercase text-black text-center leading-[0.85] tracking-[-0.02em] text-[20vw] md:text-[15vw] lg:text-[12vw]'>
-          We're All Ears
+          We&apos;re All Ears
         </h1>
         <p className='mt-6 text-center text-neutral-600 text-lg md:text-xl max-w-2xl mx-auto'>
-          Fill out the contact form below and tell us about your vision. We're excited to hear from you!
+          Fill out the contact form below and tell us about your vision. We&apos;re excited to hear from you!
         </p>
 
         {/* Enhanced card form */}
