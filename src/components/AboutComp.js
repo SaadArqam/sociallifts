@@ -6,12 +6,12 @@ import Footer from './Footer';
 // Inline ScrollStack components so cards live in the same file
 const ScrollStackItem = ({ children, itemClassName = '' }) => (
     <div
-      className={`scroll-stack-card relative w-full h-80 my-8 p-12 rounded-[40px] shadow-[0_0_40px_rgba(0,0,0,0.08)] box-border origin-top will-change-transform bg-[oklch(1_0_0)] border border-[oklch(0.95_0.005_95)] ${itemClassName}`.trim()}
+      className={`scroll-stack-card relative w-full h-auto min-h-[280px] my-8 p-12 rounded-[40px] shadow-[0_0_40px_rgba(0,0,0,0.08)] box-border origin-top will-change-transform bg-[oklch(1_0_0)] border border-[oklch(0.95_0.005_95)] ${itemClassName}`.trim()}
       style={{
         backfaceVisibility: 'hidden',
         transformStyle: 'preserve-3d',
         opacity: 1,
-        transition: 'box-shadow 0.3s ease-out'
+        transition: 'transform 0.5s ease-out, box-shadow 0.3s ease-out'
       }}>
       {children}
     </div>
@@ -201,13 +201,13 @@ const ScrollStack = ({
   const setupLenis = useCallback(() => {
     if (useWindowScroll) {
       const lenis = new Lenis({
-        duration: 1.4,
+        duration: 1.2,
         easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         smoothWheel: true,
         touchMultiplier: 2.5,
         infinite: false,
-        wheelMultiplier: 1.2,
-        lerp: 0.08,
+        wheelMultiplier: 1.5,
+        lerp: 0.1,
         syncTouch: true,
         syncTouchLerp: 0.05
       });
@@ -346,9 +346,14 @@ const ScrollStack = ({
           -webkit-backface-visibility: hidden;
           perspective: 1000px;
           -webkit-perspective: 1000px;
+          transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s ease-out;
         }
         .scroll-stack-card:hover {
           box-shadow: 0 0 50px rgba(0,0,0,0.12) !important;
+          transform: translateY(-5px) translateZ(0);
+        }
+        body {
+          scroll-behavior: smooth;
         }
       `}</style>
       <div className={containerClassName} ref={scrollerRef} style={containerStyles}>
@@ -400,7 +405,7 @@ const AboutComp = () => {
                 <div className='max-w-3xl ml-auto pr-8 md:pr-16'>
                     <div className='space-y-6'>
                         <p className='text-black text-lg md:text-xl leading-relaxed font-light font-serif tracking-wide'>
-                            At Social Lifts, we believe growth shouldn&#39;;t be chaotic. That&#39;;s why we built a full-funnel creative and growth team under one roof—video editors, designers, social media strategists, web developers, and SEO experts all working as one seamless engine.
+                            At Social Lifts, we believe growth shouldn&#39;t be chaotic. That&#39;s why we built a full-funnel creative and growth team under one roof—video editors, designers, social media strategists, web developers, and SEO experts all working as one seamless engine.
                         </p>
                         
                         <p className='text-black text-lg md:text-xl leading-relaxed font-light font-serif tracking-wide'>
@@ -408,7 +413,7 @@ const AboutComp = () => {
                         </p>
                         
                         <p className='text-black text-lg md:text-xl leading-relaxed font-light font-serif tracking-wide'>
-                            We craft creative that stops the scroll—cinematic edits, bold visuals, and platform-native content designed for today&#39;;s fast-moving algorithms. With benefit-first messaging and engaging narratives, we don&#39;;t just get attention, we keep it.
+                            We craft creative that stops the scroll—cinematic edits, bold visuals, and platform-native content designed for today&#39;s fast-moving algorithms. With benefit-first messaging and engaging narratives, we don&#39;t just get attention, we keep it.
                         </p>
                         
                         <p className='text-black text-lg md:text-xl leading-relaxed font-light font-serif tracking-wide'>
@@ -418,18 +423,12 @@ const AboutComp = () => {
                 </div>
             </div>
 
-            {/* Place the stack in a fixed-height container so the stack scrolls internally, not with the page */}
+            {/* Card stack that responds to global window scrolling */}
             <div
-              className="w-full max-w-8xl mx-auto my-24 hide-scrollbar"
-              style={{
-                height: "700px",
-                overflowY: "auto",
-                scrollbarWidth: "none", // Firefox
-                msOverflowStyle: "none" // IE/Edge
-              }}
+              className="w-full max-w-8xl mx-auto my-24"
             >
               <div className="h-full">
-                <ScrollStack>
+                <ScrollStack useWindowScroll={true} itemDistance={180} baseScale={0.92}>
                   {/* 01 */}
                   <ScrollStackItem>
                     <div className='grid grid-cols-1 md:grid-cols-2 gap-8 items-start'>
@@ -480,7 +479,7 @@ const AboutComp = () => {
                       </div>
                       <div>
                         <p className='text-black text-lg md:text-xl leading-relaxed font-light font-serif tracking-wide'>
-                          Moodboards, Scrappy sketches, Chasing hunches. This is where we go radio silent, only because we&#39;re exploring things that might fail just to see what else shows up. This phase is messy, intuitive, and alive. It&#39;s about letting the idea stretch its legs before it settles into form.
+                            Moodboards, Scrappy sketches, Chasing hunches. This is where we go radio silent, only because we're exploring things that might fail just to see what else shows up. This phase is messy, intuitive, and alive. It's about letting the idea stretch its legs before it settles into form.
                         </p>
                         <div className='mt-6 flex flex-wrap gap-3 items-center'>
                           <span className='px-4 py-2 rounded-full bg-green-100 text-green-900 text-sm'>Moodboards</span>
@@ -500,7 +499,7 @@ const AboutComp = () => {
                       </div>
                       <div>
                         <p className='text-black text-lg md:text-xl leading-relaxed font-light font-serif tracking-wide'>
-                          The raw gets refined. We craft your brand’s visual and verbal world: type, tone, color, story. Not just what looks good, but what feels true. Every decision earns its place.
+                            The raw gets refined. We craft your brand's visual and verbal world: type, tone, color, story. Not just what looks good, but what feels true. Every decision earns its place.
                         </p>
                         <div className='mt-6 flex flex-wrap gap-3 items-center'>
                           <span className='px-4 py-2 rounded-full bg-green-100 text-green-900 text-sm'>Brand Identity</span>
@@ -551,6 +550,27 @@ const AboutComp = () => {
                 </ScrollStack>
               </div>
             </div>
+
+            {/* Let's work together section */}
+            <div className="w-full max-w-6xl mx-auto my-32 px-8 py-24 rounded-[40px] bg-[#e6f3ff]">
+                <div className="flex flex-col md:flex-row justify-between items-center">
+                    <div className="mb-10 md:mb-0">
+                        <h2 className="text-5xl md:text-6xl lg:text-7xl font-medium text-[#2d6cb5] mb-4">
+                            Let's work<br />together
+                        </h2>
+                    </div>
+                    <div className="flex flex-col items-start">
+                        <button className="px-8 py-3 bg-black text-white rounded-full text-sm font-medium mb-6 hover:bg-[#2d6cb5] transition-colors duration-300">
+                            Book A Call
+                        </button>
+                        <p className="text-sm text-gray-700">
+                            or reach out to<br />
+                            <a href="mailto:contact.sociallifts@gmail.com" className="font-medium">contact.sociallifts@gmail.com</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
             <style jsx global>{`
                 /* Hide scrollbar for Chrome, Safari and Opera */
                 .hide-scrollbar::-webkit-scrollbar {
@@ -580,4 +600,3 @@ const AboutComp = () => {
 }
 
 export default AboutComp
-// export default AboutComp
