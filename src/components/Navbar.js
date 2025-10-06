@@ -10,9 +10,9 @@ import gsap from "gsap";
 import Button from "./Button"; // keep your custom Button
 
 const navItems = [
-  { label: "Home", href: "/src/app/page.js" },
-  { label: "About", href: "/about" }, // Link to AboutComp.js route
-  { label: "Work", href: "/src/components/videosection.js" },
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
+  { label: "Work", href: "/#work" },
 ];
 
 const Navbar = () => {

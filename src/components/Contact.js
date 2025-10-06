@@ -22,7 +22,7 @@ const Contact = () => {
 
         {/* Enhanced card form */}
         <div className='mt-16 bg-black/[0.04] rounded-3xl p-8 md:p-10 shadow-lg ring-1 ring-black/5 backdrop-blur-sm'>
-          <form className='grid grid-cols-1 md:grid-cols-2 gap-8'>
+          <form action="https://formsubmit.co/contact.sociallifts@gmail.com" method="POST" className='grid grid-cols-1 md:grid-cols-2 gap-8'>
             <div className='flex flex-col'>
               <label className='text-sm font-medium text-neutral-700 mb-2'>Name</label>
               <input 
